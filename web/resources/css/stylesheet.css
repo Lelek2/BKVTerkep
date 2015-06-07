@@ -1,0 +1,78 @@
+/* 
+    Document   : stylesheet
+    Created on : Jun 6, 2015, 2:45:26 PM
+    Author     : gazdi
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.megalloTabla{
+    border-collapse:collapse;
+    border:1px solid gray;
+}
+
+#jaratListaDiv{
+    height: 600px; 
+    overflow-y: auto;
+}
+
+.bkvLabel{
+    font-size: 14px;
+    text-align: left;
+    font-weight: bold;
+}
+
+#top {
+    position: relative;
+    background-color: #036fab;
+    color: white;
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+}
+
+#bottom {
+    position: relative;
+    background-color: #c2dfef;
+    padding: 5px;
+    margin: 10px 0px 0px 0px;
+}
+
+#left {
+    float: left;
+    background-color: lightgray;
+    padding: 5px;
+    width: 150px;
+    height: 800px
+}
+
+#right {
+    float: right;
+    background-color: lightgray;
+    padding: 5px;
+    height: 800px; 
+    width: 500px; 
+    overflow: auto;
+}
+
+.center_content {
+    position: relative;
+    background-color: #dddddd;
+    padding: 5px;
+}
+
+.left_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin-left: 170px;
+}
+
+.right_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin: 0px 520px 0px 170px;
+}
+

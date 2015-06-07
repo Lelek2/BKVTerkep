@@ -2,59 +2,66 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>BKV Térkép</title>
-        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <h:outputStylesheet name="css/stylesheet.css" />
+        <h:outputStylesheet name="css/default.css" />
         <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript" ></script>
     </h:head>
     <h:body>
-        <div>Szűrés járat típus szerint</div>
         <h:form>
-            <h:selectManyCheckbox id="jaratTipusSzuro" layout="pageDirection" value="#{JaratListaBean.jaratTipusSzuro}" converter="jaratTipusConverter">
-                <f:selectItems value="#{JaratListaBean.osszesJaratTipus}"/>
-            </h:selectManyCheckbox>
-            <h:commandButton value="Szűrés" action="render">
-                <f:ajax execute="jaratTipusSzuro" render="jaratLista"/>
-            </h:commandButton>
-            <br/>
-
-            <div>Járat lista</div>
-            <h:panelGroup id="jaratLista">
-                <h:selectOneListbox id="jaratListBox" value="#{JaratListaBean.selectedJaratNev}" size="30">
-                    <f:selectItems value="#{JaratListaBean.jaratLista}" var="item" itemLabel="#{item.nev}" itemValue="#{item.nev}" />
-                    <f:ajax render="megalloTabla megalloMap"/>
-                </h:selectOneListbox>
-            </h:panelGroup>
-            <br/>
-
-            <div style="height: 200px; overflow: auto; float: left;" class="megalloTabla">
-                <p:dataTable id="megalloTabla" selectionMode="single" 
-                             value='#{JaratListaBean.jaratMegalloLista}' 
-                             var="jaratMegallo" rowKey="#{jaratMegallo.nev}">
-                    <f:facet name="header">
-                        Járat megállói
-                    </f:facet>
-                    <p:column>    				
-                        <f:facet name="header">Megállónév</f:facet>    				
-                            #{jaratMegallo.nev}
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">Szélesség</f:facet>
-                            #{jaratMegallo.szelesseg}
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">Hosszúság</f:facet>
-                            #{jaratMegallo.hosszusag}
-                    </p:column>
-                </p:dataTable>
+            <!--<div id="top">
+            </div>-->
+            <div>
+                <div id="left">
+                    <div class="bkvLabel">Járat típus szűrő</div>
+                    <p:selectManyCheckbox id="jaratTipusSzuro" layout="pageDirection" value="#{JaratListaBean.jaratTipusSzuro}" converter="jaratTipusConverter">
+                        <f:selectItems value="#{JaratListaBean.osszesJaratTipus}"/>
+                    </p:selectManyCheckbox>
+                    <p:commandButton value="Szűrés" action="render" update="jaratTipusSzuro jaratLista"/>
+                    <div class="bkvLabel" style="margin-top: 20px">Járat lista</div>
+                    <div id="jaratListaDiv">
+                        <h:panelGroup id="jaratLista">
+                            <p:selectOneListbox id="jaratListBox" value="#{JaratListaBean.selectedJaratNev}" >
+                                <f:selectItems value="#{JaratListaBean.jaratLista}" var="item" itemLabel="#{item.nev}" itemValue="#{item.nev}" />
+                                <f:ajax render="megalloTabla megalloMap"/>
+                            </p:selectOneListbox>
+                        </h:panelGroup>
+                    </div>
+                </div>
+                <div>
+                    <div id="right">
+                        <p:dataTable id="megalloTabla" selectionMode="single" 
+                                     value='#{JaratListaBean.jaratMegalloLista}' 
+                                     var="jaratMegallo" rowKey="#{jaratMegallo.nev}">
+                            <f:facet name="header">
+                                Járat megállói
+                            </f:facet>
+                            <p:column>    				
+                                <f:facet name="header">Megállónév</f:facet>    				
+                                    #{jaratMegallo.nev}
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Szélesség</f:facet>
+                                    #{jaratMegallo.szelesseg}
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Hosszúság</f:facet>
+                                    #{jaratMegallo.hosszusag}
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <div id="content" class="right_content">
+                        <p:gmap id="megalloMap" style="width:100%; height:800px;" center="#{JaratListaBean.jaratMapCenter}" type="HYBRID" zoom='#{JaratListaBean.jaratMapZoom}' model="#{JaratListaBean.jaratMegalloModel}">
+                            <p:ajax event="stateChange" listener="#{JaratListaBean.onMapStateChange}" update="megalloMap"/>
+                        </p:gmap>
+                    </div>
+                </div>
             </div>
-            
-            <p:gmap id="megalloMap" center="#{JaratListaBean.jaratMapCenter}" type="HYBRID" zoom='#{JaratListaBean.jaratMapZoom}' style="width:640px;height:480px" model="#{JaratListaBean.jaratMegalloModel}">
-                <p:ajax event="stateChange" listener="#{JaratListaBean.onMapStateChange}" update="megalloMap"/>
-            </p:gmap>
+            <!--<div id="bottom">
+            </div>-->
         </h:form>
         <br />
     </h:body>
