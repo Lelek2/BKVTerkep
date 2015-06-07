@@ -52,7 +52,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
             //table.addColumn("JaratSzam");
             String whereSql = "";
             for (JaratTipus jt : jaratTipusok) {
-                whereSql += "routes.route_type = '" + jt.ordinal() + "' or ";
+                whereSql += "routes.route_type = '" + jt.getVal() + "' or ";
             }
             whereSql = whereSql.substring(0, whereSql.length() - 4);
             String sql = "select DISTINCT routes.route_short_name "

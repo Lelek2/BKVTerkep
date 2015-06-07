@@ -9,8 +9,12 @@ package BKVTerkep;
  * @author gazdi
  */
 public enum JaratTipus {
-    Villamos,
-    Metro,
-    Hev,
-    Busz,
+    Villamos(0),
+    Metro(1),
+    Hev(2),
+    Busz(3),
+    Hajo(4);
+    private final int val;
+    private JaratTipus(int v) { val = v; }
+    public int getVal() { return val; }
 }
