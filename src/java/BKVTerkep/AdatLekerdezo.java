@@ -111,7 +111,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
 //        String[][] obj = new String[1][1];
         try {
             Statement stmt = AdatLekerdezo.kapcsolat.createStatement();
-            String sql = "select distinct stops.stop_lat,  stops.stop_lon, stops.stop_name"
+            String sql = "select distinct stops.stop_lat, stops.stop_lon, stops.stop_name "
                     + "from routes "
                     + "RIGHT join TRIPS on routes.route_id = trips.route_id "
                     + "RIGHT join stop_times on trips.trip_id = stop_times.trip_id "

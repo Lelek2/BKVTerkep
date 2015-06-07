@@ -13,7 +13,7 @@
     <h:body>
         <div>Szűrés járat típus szerint</div>
         <h:form>
-            <h:selectManyCheckbox id="jaratTipusSzuro" value="#{JaratListaBean.jaratTipusSzuro}" converter="jaratTipusConverter">
+            <h:selectManyCheckbox id="jaratTipusSzuro" layout="pageDirection" value="#{JaratListaBean.jaratTipusSzuro}" converter="jaratTipusConverter">
                 <f:selectItems value="#{JaratListaBean.osszesJaratTipus}"/>
             </h:selectManyCheckbox>
             <h:commandButton value="Szűrés" action="render">
@@ -23,7 +23,7 @@
 
             <div>Járat lista</div>
             <h:panelGroup id="jaratLista">
-                <h:selectOneListbox id="jaratListBox" value="#{JaratListaBean.selectedJaratNev}" size="#{JaratListaBean.jaratLista.size()}">
+                <h:selectOneListbox id="jaratListBox" value="#{JaratListaBean.selectedJaratNev}" size="30">
                     <f:selectItems value="#{JaratListaBean.jaratLista}" var="item" itemLabel="#{item.nev}" itemValue="#{item.nev}" />
                     <f:ajax render="megalloTabla megalloMap"/>
                 </h:selectOneListbox>
