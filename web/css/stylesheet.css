@@ -1,0 +1,17 @@
+/* 
+    Document   : stylesheet
+    Created on : Jun 6, 2015, 2:45:26 PM
+    Author     : gazdi
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.megalloTabla{
+   border-collapse:collapse;
+   border:1px solid gray;
+}
+
