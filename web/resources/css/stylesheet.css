@@ -16,7 +16,8 @@ root {
 }
 
 #jaratListaDiv{
-    height: 600px; 
+    height: 580px;
+    width: 100%;
     overflow-y: auto;
 }
 
@@ -45,7 +46,7 @@ root {
     float: left;
     background-color: lightgray;
     padding: 5px;
-    width: 150px;
+    width: 200px;
     height: 800px
 }
 
@@ -54,8 +55,9 @@ root {
     background-color: lightgray;
     padding: 5px;
     height: 800px; 
-    width: 500px; 
+    width: 300px; 
     overflow: auto;
+    font-size: 11px;
 }
 
 .center_content {
@@ -73,6 +75,6 @@ root {
 .right_content {
     background-color: #dddddd;
     padding: 5px;
-    margin: 0px 520px 0px 170px;
+    margin: 0px 320px 0px 220px;
 }
 

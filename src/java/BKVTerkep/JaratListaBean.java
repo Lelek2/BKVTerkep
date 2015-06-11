@@ -17,6 +17,7 @@ import org.primefaces.model.map.Circle;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Polyline;
 
 /**
  *
@@ -112,16 +113,27 @@ public class JaratListaBean implements Serializable {
         if (this.jaratMegalloLista != null) {
             this.jaratMegalloModel = new DefaultMapModel();
 
+            Polyline polyline = new Polyline();
+            List<LatLng> polyPaths = polyline.getPaths();
+            
             for (JaratMegalloBean megallo : this.jaratMegalloLista) {
-                this.jaratMegalloModel.addOverlay(
-                        JaratListaBean.CircleFactory(
-                        new LatLng(megallo.getSzelesseg(), megallo.getHosszusag()),
-                        "blue",
-                        "blue",
-                        0.7,
-                        0.5,
-                        this.GetCircleRadius()));
+//                this.jaratMegalloModel.addOverlay(
+//                        JaratListaBean.CircleFactory(
+//                        new LatLng(megallo.getSzelesseg(), megallo.getHosszusag()),
+//                        "blue",
+//                        "blue",
+//                        0.7,
+//                        0.5,
+//                        this.GetCircleRadius()));
+                
+                polyPaths.add(new LatLng(megallo.getSzelesseg(), megallo.getHosszusag()));
             }
+
+            polyline.setStrokeWeight(3);
+            polyline.setStrokeColor("blue");
+            polyline.setStrokeOpacity(0.7);
+
+            this.jaratMegalloModel.addOverlay(polyline);
         }
     }
 
@@ -154,5 +166,9 @@ public class JaratListaBean implements Serializable {
     public JaratListaBean() {
         this.JaratListaFrissitese();
 //        this.jaratLista = AdatLekerdezo.getBKVJaratLista();
+    }
+    
+    public static String RemoveDoubleQuotes(String input){
+        return input.replaceAll("^\"|\"$", "");
     }
 }

@@ -25,13 +25,23 @@ public class JaratMegalloBean{
      * latitude
      */
     private double szelesseg;
+    
+    private Integer sorSzam;
+
+    public Integer getSorSzam() {
+        return sorSzam;
+    }
+
+    public void setSorSzam(Integer sorSzam) {
+        this.sorSzam = sorSzam;
+    }
 
     public String getNev() {
         return this.nev;
     }
 
     public void setNev(String nev) {
-        this.nev = nev;
+        this.nev = JaratListaBean.RemoveDoubleQuotes(nev);
     }
 
     public double getHosszusag() {
@@ -56,13 +66,23 @@ public class JaratMegalloBean{
     public JaratMegalloBean(String nev) {
         this.nev = nev;
     }
-
+    
     /**
      * Creates a new instance of JaratMegalloBean
      */
     public JaratMegalloBean(String nev, double hosszusag, double szelesseg) {
-        this.nev = nev;
+        this.setNev(nev);
         this.hosszusag = hosszusag;
         this.szelesseg = szelesseg;
+    }
+
+    /**
+     * Creates a new instance of JaratMegalloBean
+     */
+    public JaratMegalloBean(String nev, int sorSzam, double szelesseg, double hosszusag) {
+        this.setNev(nev);
+        this.sorSzam = sorSzam;
+        this.szelesseg = szelesseg;
+        this.hosszusag = hosszusag;
     }
 }

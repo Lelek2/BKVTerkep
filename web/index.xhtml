@@ -24,8 +24,8 @@
                     <div class="bkvLabel" style="margin-top: 20px">Járat lista</div>
                     <div id="jaratListaDiv">
                         <h:panelGroup id="jaratLista">
-                            <p:selectOneListbox id="jaratListBox" value="#{JaratListaBean.selectedJaratNev}" >
-                                <f:selectItems value="#{JaratListaBean.jaratLista}" var="item" itemLabel="#{item.nev}" itemValue="#{item.nev}" />
+                            <p:selectOneListbox id="jaratListBox" value="#{JaratListaBean.selectedJaratNev}" style="font-size: 11px; width:95%">
+                                <f:selectItems value="#{JaratListaBean.jaratLista}" var="item" itemLabel="#{item.nev}" itemValue="#{item.id}" itemLabelEscaped="false"/>
                                 <f:ajax render="megalloTabla megalloMap"/>
                             </p:selectOneListbox>
                         </h:panelGroup>
@@ -36,21 +36,18 @@
                         <p:dataTable id="megalloTabla" selectionMode="single" 
                                      value='#{JaratListaBean.jaratMegalloLista}' 
                                      var="jaratMegallo" rowKey="#{jaratMegallo.nev}">
-                            <f:facet name="header">
-                                Járat megállói
-                            </f:facet>
                             <p:column>    				
-                                <f:facet name="header">Megállónév</f:facet>    				
-                                    #{jaratMegallo.nev}
+                                <f:facet name="header">Megállók</f:facet>    				
+                                <h:outputText value="#{jaratMegallo.nev}" /> 
                             </p:column>
-                            <p:column>
+<!--                            <p:column>
                                 <f:facet name="header">Szélesség</f:facet>
                                     #{jaratMegallo.szelesseg}
                             </p:column>
                             <p:column>
                                 <f:facet name="header">Hosszúság</f:facet>
                                     #{jaratMegallo.hosszusag}
-                            </p:column>
+                            </p:column>-->
                         </p:dataTable>
                     </div>
                     <div id="content" class="right_content">

@@ -18,6 +18,15 @@ public class JaratBean implements Serializable{
 
     private JaratTipus tipus;
     private String nev;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public JaratTipus getTipus() {
         return tipus;
@@ -35,11 +44,6 @@ public class JaratBean implements Serializable{
         this.nev = nev;
     }
 
-    public void setNev(String nev, JaratTipus tipus) {
-        this.nev = nev;
-        this.tipus = tipus;
-    }
-
 //    /**
 //     * Creates a new instance of JaratBean
 //     */
@@ -51,5 +55,18 @@ public class JaratBean implements Serializable{
      */
     public JaratBean(String nev) {
         this.nev = nev;
+    }
+    
+     /**
+     * Creates a new instance of JaratBean
+     */
+    public JaratBean(String id, String nev) {
+        this.id = id;
+        this.nev = nev;
+    }
+    
+    public static String GetJaratNev(String shortName, String dsc)
+    {
+        return "<span style='font-weight:bold'>" + shortName + "</span><br/>" + dsc;
     }
 }
