@@ -46,7 +46,7 @@ root {
     float: left;
     background-color: lightgray;
     padding: 5px;
-    width: 200px;
+    width: 220px;
     height: 800px
 }
 
@@ -75,6 +75,6 @@ root {
 .right_content {
     background-color: #dddddd;
     padding: 5px;
-    margin: 0px 320px 0px 220px;
+    margin: 0px 320px 0px 240px;
 }
 

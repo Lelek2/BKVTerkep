@@ -4,17 +4,17 @@
  */
 package BKVTerkep;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import org.primefaces.model.SelectableDataModel;
+import javax.faces.bean.SessionScoped;
 
 /**
  *
  * @author gazdi
  */
 @ManagedBean
-@RequestScoped
-public class JaratMegalloBean{
+@SessionScoped
+public class JaratMegalloBean implements Serializable{
 
     private String nev;
     /**
@@ -40,8 +40,8 @@ public class JaratMegalloBean{
         return this.nev;
     }
 
-    public void setNev(String nev) {
-        this.nev = JaratListaBean.RemoveDoubleQuotes(nev);
+    public final void setNev(String nev) {
+        this.nev = JaratListaBean.removeDoubleQuotes(nev);
     }
 
     public double getHosszusag() {
@@ -58,6 +58,11 @@ public class JaratMegalloBean{
 
     public void setSzelesseg(double szelesseg) {
         this.szelesseg = szelesseg;
+    }
+    
+    public String getCoordinates()
+    {
+        return this.getSzelesseg() + ", " + this.getHosszusag();
     }
 
     /**

@@ -12,8 +12,6 @@
     </h:head>
     <h:body>
         <h:form>
-            <!--<div id="top">
-            </div>-->
             <div>
                 <div id="left">
                     <div class="bkvLabel">Járat típus szűrő</div>
@@ -21,7 +19,8 @@
                         <f:selectItems value="#{JaratListaBean.osszesJaratTipus}"/>
                     </p:selectManyCheckbox>
                     <p:commandButton value="Szűrés" action="render" update="jaratTipusSzuro jaratLista"/>
-                    <div class="bkvLabel" style="margin-top: 20px">Járat lista</div>
+                    <hr/>
+                    <div class="bkvLabel" style="margin: 5px 0px 5px;">Járat lista</div>
                     <div id="jaratListaDiv">
                         <h:panelGroup id="jaratLista">
                             <p:selectOneListbox id="jaratListBox" value="#{JaratListaBean.selectedJaratNev}" style="font-size: 11px; width:95%">
@@ -33,32 +32,45 @@
                 </div>
                 <div>
                     <div id="right">
+                        <h:panelGrid columns="2" style="width: 100%">
+                            <div class="bkvLabel">Irány</div>
+                            <p:selectOneRadio id="iranySelection" value="#{JaratListaBean.directionId}">
+                                <f:selectItem itemLabel="Oda" itemValue="0" />
+                                <f:selectItem itemLabel="Vissza" itemValue="1" />
+                                <f:ajax execute="iranySelection" render="megalloTabla megalloMap"/>
+                            </p:selectOneRadio>
+                            <div class="bkvLabel">Középreigazítás</div>
+                            <p:selectBooleanCheckbox id="centeringSelection" value="#{JaratListaBean.isCenteringEnabled}">
+                                <f:ajax execute="centeringSelection" render="megalloMap"/>
+                            </p:selectBooleanCheckbox>
+                            <div class="bkvLabel">Megállók</div>
+                            <p:selectBooleanCheckbox id="displaySelection" value="#{JaratListaBean.isOverlayEnabled}">
+                                <f:ajax execute="displaySelection" render="megalloMap"/>
+                            </p:selectBooleanCheckbox>
+                        </h:panelGrid>
+                        <hr/>
                         <p:dataTable id="megalloTabla" selectionMode="single" 
                                      value='#{JaratListaBean.jaratMegalloLista}' 
-                                     var="jaratMegallo" rowKey="#{jaratMegallo.nev}">
-                            <p:column>    				
-                                <f:facet name="header">Megállók</f:facet>    				
+                                     var="jaratMegallo" rowKey="#{jaratMegallo.nev}" 
+                                     selection="#{JaratListaBean.selectedMegallo}">
+                            <p:ajax event="rowSelect" listener="#{JaratListaBean.onRowSelect}" update=":#{p:component('megalloMap')}"/>
+                            <f:facet name="header">Megállók</f:facet>    				
+                            <p:column style="width: 10px">
+                                <h:outputText value="#{jaratMegallo.sorSzam}" /> 
+                            </p:column>
+                            <p:column>    				                      
                                 <h:outputText value="#{jaratMegallo.nev}" /> 
                             </p:column>
-<!--                            <p:column>
-                                <f:facet name="header">Szélesség</f:facet>
-                                    #{jaratMegallo.szelesseg}
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">Hosszúság</f:facet>
-                                    #{jaratMegallo.hosszusag}
-                            </p:column>-->
                         </p:dataTable>
                     </div>
                     <div id="content" class="right_content">
                         <p:gmap id="megalloMap" style="width:100%; height:800px;" center="#{JaratListaBean.jaratMapCenter}" type="HYBRID" zoom='#{JaratListaBean.jaratMapZoom}' model="#{JaratListaBean.jaratMegalloModel}">
                             <p:ajax event="stateChange" listener="#{JaratListaBean.onMapStateChange}" update="megalloMap"/>
+                            <p:ajax event="overlaySelect" listener="#{JaratListaBean.onOverlaySelect}" update="megalloTabla megalloMap"/>
                         </p:gmap>
                     </div>
                 </div>
             </div>
-            <!--<div id="bottom">
-            </div>-->
         </h:form>
         <br />
     </h:body>

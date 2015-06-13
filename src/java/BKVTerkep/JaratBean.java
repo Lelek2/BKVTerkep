@@ -43,12 +43,6 @@ public class JaratBean implements Serializable{
     public void setNev(String nev) {
         this.nev = nev;
     }
-
-//    /**
-//     * Creates a new instance of JaratBean
-//     */
-//    public JaratBean() {
-//    }
     
     /**
      * Creates a new instance of JaratBean
@@ -67,6 +61,6 @@ public class JaratBean implements Serializable{
     
     public static String GetJaratNev(String shortName, String dsc)
     {
-        return "<span style='font-weight:bold'>" + shortName + "</span><br/>" + dsc;
+        return "<div style='border-bottom:1px solid gray;padding-bottom:2px'><span style='font-weight:bold;'>" + shortName + "</span><br/>" + JaratListaBean.removeDoubleQuotes(dsc) + "</div>";
     }
 }
