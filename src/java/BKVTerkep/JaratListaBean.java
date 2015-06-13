@@ -173,17 +173,23 @@ public class JaratListaBean implements Serializable {
 
             for (JaratMegalloBean megallo : this.jaratMegalloLista) {
                 if (megallo != null) {
+                    boolean isSelected = megallo == this.selectedMegallo;
+                    
                     JaratMegalloCircle circle = JaratListaBean.circleFactory(
                             megallo,
                             new LatLng(megallo.getSzelesseg(), megallo.getHosszusag()),
                             CIRCLE_COLOR,
-                            CIRCLE_COLOR,
+                            isSelected ? CIRCLE_SELECTED_COLOR : CIRCLE_COLOR,
                             0.8,
                             0.5,
-                            this.getCircleRadius(false));
+                            this.getCircleRadius(isSelected));
 
                     this.jaratMegalloModel.addOverlay(circle);
 
+                    if (isSelected)
+                    {
+                        this.selectedCircle = circle;
+                    }
 //                polyPaths.add(new LatLng(megallo.getSzelesseg(), megallo.getHosszusag()));
                 }
             }
@@ -208,7 +214,7 @@ public class JaratListaBean implements Serializable {
 
     private double getCircleRadius(boolean isSelected) {
         double circleRadius = (MAX_ZOOM_PRODUCT / Math.pow(2, this.jaratMapZoom)) + this.jaratMapZoom;
-        return isSelected ? 2 * circleRadius : circleRadius;
+        return isSelected ? 1.7 * circleRadius : circleRadius;
     }
 
     public void onMapStateChange(StateChangeEvent event) {
