@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -26,7 +27,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
 
     protected static Connection kapcsolat;
 
-    public static void kapcsolatNyit() {
+    private static void kapcsolatNyit() {
         try {
             Class.forName(DRIVER);
             kapcsolat = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -37,7 +38,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         }
     }
 
-    public static void kapcsolatZar() {
+    private static void kapcsolatZar() {
         try {
             kapcsolat.close();
         } catch (SQLException e) {
@@ -45,7 +46,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         }
     }
 
-    public static void tablakTorlese() {
+    public static void tablakTorlese(JTextArea TablaKezeloLOG) {
         kapcsolatNyit();
         Statement stat;
         try {
@@ -53,41 +54,57 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
 
             try {
                 stat.executeUpdate("DROP TABLE STOP_TIMES");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE STOP_TIMES");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE STOP_TIMES: " + e.getMessage());
             }
             try {
                 stat.executeUpdate("DROP TABLE TRIPS");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE TRIPS");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE TRIPS: " + e.getMessage());
             }
             try {
                 stat.executeUpdate("DROP TABLE STOPS");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE STOPS");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE STOPS: " + e.getMessage());
             }
             try {
                 stat.executeUpdate("DROP TABLE CALENDAR");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE CALENDAR");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE CALENDAR: " + e.getMessage());
             }
             try {
                 stat.executeUpdate("DROP TABLE ROUTES");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE ROUTES");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE ROUTES: " + e.getMessage());
             }
             try {
                 stat.executeUpdate("DROP TABLE AGENCY");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE AGENCY");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE AGENCY: " + e.getMessage());
             }
             try {
                 stat.executeUpdate("DROP TABLE SHAPES");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE SHAPES");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE SHAPES: " + e.getMessage());
             }
             try {
                 stat.executeUpdate("DROP TABLE PATHWAYS");
+                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE PATHWAYS");
+                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE PATHWAYS: " + e.getMessage());
             }
@@ -105,7 +122,6 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         Statement stat;
         try {
             stat = kapcsolat.createStatement();
-            tablakTorlese();
             try {
                 stat.executeUpdate(
                         "CREATE TABLE  SHAPES (	"
@@ -263,7 +279,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
 
         try {
             stmt = kapcsolat.createStatement();
-            
+
             FileReader fr = new FileReader(txt);
             BufferedReader br = new BufferedReader(fr);
             String str = br.readLine();
@@ -277,7 +293,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
             pr.close();
             stmt.close();
             kapcsolatZar();
-        } catch (IOException | SQLException ex ) {
+        } catch (IOException | SQLException ex) {
             Logger.getLogger(AdatLekerdezo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -368,4 +384,12 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         return obj;
 
     }
+
+    /*   String sql = "SELECT stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, MAX(stop_times.shape_dist_traveled) as MaxDist "
+     + "FROM trips "
+     + "INNER JOIN stop_times ON stop_times.trip_id = trips.trip_id "
+     + "INNER JOIN stops ON stops.stop_id = stop_times.stop_id "
+     + "WHERE trips.ROUTE_ID= '" + jarat + "' AND trips.direction_id = '" + directionId + "' "
+     + "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon "
+     + "ORDER BY MaxDist"; */
 }
