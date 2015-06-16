@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,70 +47,82 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         }
     }
 
+    private static void tablakezeloLog(JTextArea TablaKezeloLOG, String str) {
+        TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n"
+                + new Timestamp(System.currentTimeMillis()) + ": " + str);
+        TablaKezeloLOG.repaint();
+    }
+
     public static void tablakTorlese(JTextArea TablaKezeloLOG) {
         kapcsolatNyit();
         Statement stat;
+        boolean gotError = false;
         try {
             stat = kapcsolat.createStatement();
 
             try {
                 stat.executeUpdate("DROP TABLE STOP_TIMES");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE STOP_TIMES");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE STOP_TIMES: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE STOP_TIMES: " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate("DROP TABLE TRIPS");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE TRIPS");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE TRIPS: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE TRIPS: " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate("DROP TABLE STOPS");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE STOPS");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE STOPS: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE STOPS: " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate("DROP TABLE CALENDAR");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE CALENDAR");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE CALENDAR: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE CALENDAR: " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate("DROP TABLE ROUTES");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE ROUTES");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE ROUTES: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE ROUTES: " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate("DROP TABLE AGENCY");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE AGENCY");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE AGENCY: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE AGENCY: " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate("DROP TABLE SHAPES");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE SHAPES");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE SHAPES: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE SHAPES: " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate("DROP TABLE PATHWAYS");
-                TablaKezeloLOG.setText(TablaKezeloLOG.getText() + "\n DROP TABLE PATHWAYS");
-                TablaKezeloLOG.repaint();
             } catch (SQLException e) {
                 System.out.println("DROP TABLE PATHWAYS: " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "DROP TABLE PATHWAYS: " + e.getMessage());
+                gotError = true;
             }
         } catch (SQLException e) {
             System.out.println("Connection: " + e.getMessage());
+            tablakezeloLog(TablaKezeloLOG, "Connection " + e.getMessage());
+            gotError = true;
+        }
+        if (gotError == false) {
+            tablakezeloLog(TablaKezeloLOG, "Táblák törölve");
         }
         kapcsolatZar();
     }
@@ -117,9 +130,10 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
     /**
      * Létrehozza a táblákat az adatbázis szerveren.
      */
-    public static void tablakLetrehozasa() {
+    public static void tablakLetrehozasa(JTextArea TablaKezeloLOG) {
         kapcsolatNyit();
         Statement stat;
+        boolean gotError = false;
         try {
             stat = kapcsolat.createStatement();
             try {
@@ -134,6 +148,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                 //+ "CONSTRAINT SHAPE_PK PRIMARY KEY (SHAPE_ID) ENABLE)");
             } catch (SQLException e) {
                 System.out.println("TABLE SHAPES " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE SHAPES " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate(
@@ -147,6 +163,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "CONSTRAINT AGENCY_PK PRIMARY KEY (AGENCY_ID) ENABLE)");
             } catch (SQLException e) {
                 System.out.println("TABLE AGENCY " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE AGENCY " + e.getMessage());
+                gotError = true;
             }
             try {
 
@@ -164,6 +182,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "FOREIGN KEY (AGENCY_ID) REFERENCES AGENCY (AGENCY_ID))");
             } catch (SQLException e) {
                 System.out.println("TABLE ROUTES " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE ROUTES " + e.getMessage());
+                gotError = true;
             }
             try {
 
@@ -182,6 +202,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "CONSTRAINT CALENDAR_PK PRIMARY KEY (SERVICE_ID) ENABLE)");
             } catch (SQLException e) {
                 System.out.println("TABLE CALENDAR " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE CALENDAR " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate(
@@ -196,6 +218,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "CONSTRAINT STOPS_PK PRIMARY KEY (STOP_ID) ENABLE)");
             } catch (SQLException e) {
                 System.out.println("TABLE STOPS " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE STOPS " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate(
@@ -216,6 +240,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "FOREIGN KEY (SERVICE_ID)  REFERENCES CALENDAR (SERVICE_ID))");
             } catch (SQLException e) {
                 System.out.println("TABLE TRIPS " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE TRIPS " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate(
@@ -230,6 +256,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "FOREIGN KEY (STOP_ID) REFERENCES STOPS (STOP_ID))");
             } catch (SQLException e) {
                 System.out.println("TABLE STOP_TIMES " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE STOP_TIMES " + e.getMessage());
+                gotError = true;
             }
             try {
                 stat.executeUpdate(
@@ -245,22 +273,37 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                 // + "FOREIGN KEY (TO_STOP_ID) REFERENCES STOPS (STOP_ID))");
             } catch (SQLException e) {
                 System.out.println("TABLE PATHWAYS " + e.getMessage());
+                tablakezeloLog(TablaKezeloLOG, "TABLE PATHWAYS " + e.getMessage());
+                gotError = true;
             }
         } catch (SQLException e1) {
             System.out.println("SQL statement hiba");
+            tablakezeloLog(TablaKezeloLOG, "SQL statement hiba");
+            gotError = true;
+        }
+        if (gotError == false) {
+            tablakezeloLog(TablaKezeloLOG, "Táblák létrehozva");
         }
         kapcsolatZar();
     }
 
-    public static void adatokBeolvasasa() {
+    public static void adatokBeolvasasa(JTextArea TablaKezeloLOG) {
         adatBeolvasas("adatok/agency.txt", "AGENCY");
+        tablakezeloLog(TablaKezeloLOG, "AGENCY tábla feltöltve");
         adatBeolvasas("adatok/shapes.txt", "SHAPES");
+        tablakezeloLog(TablaKezeloLOG, "SHAPES tábla feltöltve");
         adatBeolvasas("adatok/routes.txt", "ROUTES");
+        tablakezeloLog(TablaKezeloLOG, "ROUTES tábla feltöltve");
         adatBeolvasas("adatok/calendar.txt", "CALENDAR");
+        tablakezeloLog(TablaKezeloLOG, "CALENDAR tábla feltöltve");
         adatBeolvasas("adatok/stops.txt", "STOPS");
+        tablakezeloLog(TablaKezeloLOG, "STOPS tábla feltöltve");
         adatBeolvasas("adatok/trips.txt", "TRIPS");
+        tablakezeloLog(TablaKezeloLOG, "TRIPS tábla feltöltve");
         adatBeolvasas("adatok/stop_times.txt", "STOP_TIMES");
+        tablakezeloLog(TablaKezeloLOG, "STOP_TIMES tábla feltöltve");
         adatBeolvasas("adatok/pathways.txt", "PATHWAYS");
+        tablakezeloLog(TablaKezeloLOG, "PATHWAYS tábla feltöltve");
     }
 
     /**
@@ -293,13 +336,15 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
             pr.close();
             stmt.close();
             kapcsolatZar();
+
         } catch (IOException | SQLException ex) {
-            Logger.getLogger(AdatLekerdezo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdatLekerdezo.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private static void tablaFeltoltese(String str, String[] oszlopNevek, PreparedStatement pr, BufferedReader br) throws SQLException, IOException {
-        boolean trace = false;
+        boolean trace = true;
         final int batchSize = 1000;
         int count = 0;
         while (str != null) {
