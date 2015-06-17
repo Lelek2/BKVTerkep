@@ -5,6 +5,8 @@
  */
 package bkk_admin_tool;
 
+import java.io.PrintStream;
+
 /**
  *
  * @author U539864
@@ -51,7 +53,6 @@ public class ProbaGui extends javax.swing.JFrame {
         exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(900, 800));
         setResizable(false);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
@@ -146,6 +147,8 @@ public class ProbaGui extends javax.swing.JFrame {
         TablaKezeloLOG.setColumns(20);
         TablaKezeloLOG.setRows(5);
         jScrollPane3.setViewportView(TablaKezeloLOG);
+        JTextAreaOutputStream out = new JTextAreaOutputStream (TablaKezeloLOG);
+        System.setOut (new PrintStream (out));
 
         javax.swing.GroupLayout jLayeredPane2Layout = new javax.swing.GroupLayout(jLayeredPane2);
         jLayeredPane2.setLayout(jLayeredPane2Layout);
@@ -243,15 +246,18 @@ public class ProbaGui extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        AdatLekerdezo.tablakTorlese(TablaKezeloLOG);
+        AdatLekerdezo.tablakTorlese();
+        this.repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        AdatLekerdezo.tablakLetrehozasa(TablaKezeloLOG);
+        AdatLekerdezo.tablakLetrehozasa();
+        this.repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         AdatLekerdezo.adatokBeolvasasa();
+        this.repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -305,7 +311,6 @@ public class ProbaGui extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JLayeredPane jLayeredPane3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;
