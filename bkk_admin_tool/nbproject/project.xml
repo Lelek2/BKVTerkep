@@ -5,7 +5,6 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>bkk_admin_tool</name>
             <source-roots>
-                <root id="src.adatok.dir"/>
                 <root id="src.dir"/>
             </source-roots>
             <test-roots>
