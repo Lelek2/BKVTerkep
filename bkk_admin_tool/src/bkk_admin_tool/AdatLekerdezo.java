@@ -142,10 +142,9 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "SHAPE_ID VARCHAR2(100) NOT NULL,"
                         + "shape_pt_lat VARCHAR2(200),"
                         + "shape_pt_lon VARCHAR2(200),"
-                        + "shape_pt_sequence NUMBER,"
-                        + "shape_dist_traveled VARCHAR2(200),"
-                        + "shape_bkk_ref VARCHAR2(255))");
-                //+ "CONSTRAINT SHAPE_PK PRIMARY KEY (SHAPE_ID) ENABLE)");
+                        + "shape_pt_sequence VARCHAR2(200),"
+                        + "shape_dist_traveled VARCHAR2(200))");
+
             } catch (SQLException e) {
                 System.out.println("TABLE SHAPES " + e.getMessage());
                 tablakezeloLog(TablaKezeloLOG, "TABLE SHAPES " + e.getMessage());
@@ -171,7 +170,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                 stat.executeUpdate(
                         "CREATE TABLE  ROUTES (	"
                         + "ROUTE_ID VARCHAR2(100),"
-                        + "AGENCY_ID VARCHAR2(100),"
+                        + "AGENCY_ID VARCHAR2(100) NOT NULL,"
                         + "ROUTE_SHORT_NAME VARCHAR2(255),"
                         + "ROUTE_LONG_NAME VARCHAR2(255),"
                         + "ROUTE_DESC VARCHAR2(255),"
@@ -212,6 +211,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "STOP_NAME VARCHAR2(255),"
                         + "STOP_LAT VARCHAR2(200),"
                         + "STOP_LON VARCHAR2(200),"
+                        + "STOP_CODE VARCHAR2(200),"
                         + "LOCATION_TYPE VARCHAR2(1),"
                         + "PARENT_STATION VARCHAR2(100),"
                         + "WHEELCHAIR_BOARDING VARCHAR2(200),"
@@ -233,10 +233,8 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "SHAPE_ID VARCHAR2(100),"
                         + "WHEELCHAIR_ACCESSIBLE VARCHAR2(200),"
                         + "BIKES_ALLOWED VARCHAR2(200),"
-                        + "TRIPS_BKK_REF VARCHAR2(100),"
                         + "CONSTRAINT TRIP_ID_PK PRIMARY KEY (TRIP_ID) ENABLE,"
                         + "FOREIGN KEY (ROUTE_ID)  REFERENCES ROUTES (ROUTE_ID),"
-                        //	+ "FOREIGN KEY (SHAPE_ID)  REFERENCES SHAPES (SHAPE_ID),"
                         + "FOREIGN KEY (SERVICE_ID)  REFERENCES CALENDAR (SERVICE_ID))");
             } catch (SQLException e) {
                 System.out.println("TABLE TRIPS " + e.getMessage());
@@ -247,9 +245,9 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                 stat.executeUpdate(
                         "CREATE TABLE  STOP_TIMES ("
                         + "TRIP_ID VARCHAR2(100),"
+                        + "STOP_ID VARCHAR2(100),"
                         + "ARRIVAL_TIME VARCHAR2(100),"
                         + "DEPARTURE_TIME VARCHAR2(100),"
-                        + "STOP_ID VARCHAR2(100),"
                         + "STOP_SEQUENCE VARCHAR2(200),"
                         + "SHAPE_DIST_TRAVELED VARCHAR2(200),"
                         + "FOREIGN KEY (TRIP_ID) REFERENCES TRIPS (TRIP_ID),"
@@ -266,7 +264,6 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                         + "PATHWAY_TYPE VARCHAR2(100),"
                         + "FROM_STOP_ID VARCHAR2(100),"
                         + "TO_STOP_ID VARCHAR2(100),"
-                        + "STOP_SEQUENCE VARCHAR2(200),"
                         + "TRAVERSAL_TIME VARCHAR2(200),"
                         + "WHEELCHAIR_TRAVERSAL_TIME VARCHAR2(200)" + ")");
                 // + "FOREIGN KEY (FROM_STOP_ID) REFERENCES STOPS (STOP_ID),"
@@ -287,23 +284,23 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         kapcsolatZar();
     }
 
-    public static void adatokBeolvasasa(JTextArea TablaKezeloLOG) {
+    public static void adatokBeolvasasa() {
         adatBeolvasas("adatok/agency.txt", "AGENCY");
-        tablakezeloLog(TablaKezeloLOG, "AGENCY tábla feltöltve");
+        //    tablakezeloLog(TablaKezeloLOG, "AGENCY tábla feltöltve");
         adatBeolvasas("adatok/shapes.txt", "SHAPES");
-        tablakezeloLog(TablaKezeloLOG, "SHAPES tábla feltöltve");
+        //     tablakezeloLog(TablaKezeloLOG, "SHAPES tábla feltöltve");
         adatBeolvasas("adatok/routes.txt", "ROUTES");
-        tablakezeloLog(TablaKezeloLOG, "ROUTES tábla feltöltve");
+        //     tablakezeloLog(TablaKezeloLOG, "ROUTES tábla feltöltve");
         adatBeolvasas("adatok/calendar.txt", "CALENDAR");
-        tablakezeloLog(TablaKezeloLOG, "CALENDAR tábla feltöltve");
+        //    tablakezeloLog(TablaKezeloLOG, "CALENDAR tábla feltöltve");
         adatBeolvasas("adatok/stops.txt", "STOPS");
-        tablakezeloLog(TablaKezeloLOG, "STOPS tábla feltöltve");
+        //    tablakezeloLog(TablaKezeloLOG, "STOPS tábla feltöltve");
         adatBeolvasas("adatok/trips.txt", "TRIPS");
-        tablakezeloLog(TablaKezeloLOG, "TRIPS tábla feltöltve");
+        //    tablakezeloLog(TablaKezeloLOG, "TRIPS tábla feltöltve");
         adatBeolvasas("adatok/stop_times.txt", "STOP_TIMES");
-        tablakezeloLog(TablaKezeloLOG, "STOP_TIMES tábla feltöltve");
+        //    tablakezeloLog(TablaKezeloLOG, "STOP_TIMES tábla feltöltve");
         adatBeolvasas("adatok/pathways.txt", "PATHWAYS");
-        tablakezeloLog(TablaKezeloLOG, "PATHWAYS tábla feltöltve");
+        //   tablakezeloLog(TablaKezeloLOG, "PATHWAYS tábla feltöltve");
     }
 
     /**
@@ -319,18 +316,69 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         boolean trace = true;
         kapcsolatNyit();
         Statement stmt;
-
+        final int batchSize = 1000;
+        int count = 0;
         try {
             stmt = kapcsolat.createStatement();
 
+            String str = "";
             FileReader fr = new FileReader(txt);
+
             BufferedReader br = new BufferedReader(fr);
-            String str = br.readLine();
+            str = br.readLine();
             String[] oszlopNevek = str.split(",");
-            String prepareSql = getPrepareSql(oszlopNevek, tablaNev);
+            String oszlopKerdojel = "(";
+            for (int i = 0; i < oszlopNevek.length; i++) {
+                oszlopKerdojel += "?,";
+            }
+            oszlopKerdojel = oszlopKerdojel.substring(0, oszlopKerdojel.length() - 1);
+            oszlopKerdojel += ")";
+            String prepareSql = "INSERT INTO " + tablaNev + " VALUES " + oszlopKerdojel;
+            System.out.println(prepareSql);
             PreparedStatement pr = kapcsolat.prepareStatement(prepareSql);
             str = br.readLine();
-            tablaFeltoltese(str, oszlopNevek, pr, br);
+
+            /*  FileReader fr = new FileReader(txt);
+             BufferedReader br = new BufferedReader(fr);
+             String str = br.readLine();
+             String[] oszlopNevek = str.split(",");
+             String prepareSql = getPrepareSql(oszlopNevek, tablaNev);
+             PreparedStatement pr = kapcsolat.prepareStatement(prepareSql);
+             str = br.readLine();*/
+            // tablaFeltoltese(str, oszlopNevek, pr, br);
+            System.out.println("STR: length:" + str.length() + " str: " + str);
+            while (str != null) {
+                str = str.replace(", ", "|");
+                if (trace) {
+                    System.out.println(str);
+                }
+                String[] sorok = Arrays.copyOf(str.split(","), oszlopNevek.length);
+                for (int i = 1; i < oszlopNevek.length + 1; i++) {
+                    pr.setString(i, sorok[i - 1]);
+                }
+                /*pr.addBatch();
+                 System.out.println(count);
+                 if (++count % batchSize == 0) {
+                 pr.executeBatch();
+                 }
+                 */
+                try {
+                    pr.addBatch();
+                } catch (SQLException e) {
+                    System.out.println(str);
+                    e.printStackTrace();
+                }
+                //stmt.execute(sql);
+                System.out.println(count);
+                if (++count % batchSize == 0) {
+                    System.out.println("KILOVE");
+                    pr.executeBatch();
+                    count = 0;
+                }
+                str = br.readLine();
+            }
+            System.out.println(str + "  sssssstr " );
+            pr.executeBatch();
 
             br.close();
             pr.close();
@@ -338,6 +386,7 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
             kapcsolatZar();
 
         } catch (IOException | SQLException ex) {
+            System.out.println(ex.getMessage());
             Logger.getLogger(AdatLekerdezo.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
@@ -349,6 +398,9 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
         int count = 0;
         while (str != null) {
             str = str.replace(", ", "|");
+            if (trace) {
+                System.out.println(str);
+            }
             String[] sorok = Arrays.copyOf(str.split(","), oszlopNevek.length);
             for (int i = 1; i < oszlopNevek.length + 1; i++) {
                 pr.setString(i, sorok[i - 1]);
@@ -358,9 +410,6 @@ public class AdatLekerdezo implements AdatbazisKapcsolat {
                 pr.executeBatch();
             }
             str = br.readLine();
-            if (trace) {
-                System.out.println(str);
-            }
         }
         pr.executeBatch();
     }
