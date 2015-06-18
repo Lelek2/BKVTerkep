@@ -11,7 +11,7 @@ package BKVTerkep;
 public enum JaratTipus {
     Villamos(0),
     Metro(1),
-    Hev(2),
+    Hev(109),
     Busz(3),
     Hajo(4);
     private final int val;
