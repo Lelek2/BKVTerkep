@@ -70,14 +70,6 @@ public class AdatLekerdezo extends AdatbazisKapcsolat {
         return jaratLista;
     }
 
-    public static List<JaratBean> getBKVJaratLista() {
-        return jaratokLekerdezese(EnumSet.of(
-                JaratTipus.Villamos,
-                JaratTipus.Metro,
-                JaratTipus.Hev,
-                JaratTipus.Busz));
-    }
-
     public static List<JaratMegalloBean> jaratokMegallokLekerdezese(String jarat, String directionId) {
         List<JaratMegalloBean> jaratMegallok = new ArrayList<JaratMegalloBean>();
         AdatLekerdezo.kapcsolatNyit();
